@@ -200,7 +200,7 @@ namespace SchoolAPiDataAccessLayer
                 using (var connection = new SqlConnection(DataGlobal._connectionString))
                 {
 
-                    using (var command = new SqlCommand("sp_staffs_Exist", connection))
+                    using (var command = new SqlCommand("sp_staffSalary_Exist", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
