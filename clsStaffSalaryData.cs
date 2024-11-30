@@ -107,7 +107,6 @@ namespace SchoolAPiDataAccessLayer
 
                         command.Parameters.AddWithValue("@StaffID", staff.StaffID);
                         command.Parameters.AddWithValue("@Salary", staff.Salary);
-                        command.Parameters.AddWithValue("@EffectiveDate", staff.EffectiveDate);
                         command.Parameters.AddWithValue("@Bonus", staff.Bonus);
                         command.Parameters.AddWithValue("@Deductions", staff.Deductions);
 
@@ -148,7 +147,6 @@ namespace SchoolAPiDataAccessLayer
 
                         command.Parameters.AddWithValue("@StaffSalaryID", staff.StaffSalaryID);
                         command.Parameters.AddWithValue("@Salary", staff.Salary);
-                        command.Parameters.AddWithValue("@EffectiveDate", staff.EffectiveDate);
                         command.Parameters.AddWithValue("@Bonus", staff.Bonus);
                         command.Parameters.AddWithValue("@Deductions", staff.Deductions);
 
