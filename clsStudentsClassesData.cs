@@ -101,7 +101,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@ID", studentClass.StudentID);
+                        command.Parameters.AddWithValue("@StudentID", studentClass.StudentID);
                         command.Parameters.AddWithValue("@CLassID", studentClass.ClassID);
 
                         var outputIdParam = new SqlParameter("@NewID", SqlDbType.Int)
@@ -141,8 +141,8 @@ namespace SchoolAPiDataAccessLayer
 
 
                         command.Parameters.AddWithValue("@ID", studentClass.ID);
-                        command.Parameters.AddWithValue("@ID", studentClass.StudentID);
-                        command.Parameters.AddWithValue("@CLassID", studentClass.ClassID);
+                        command.Parameters.AddWithValue("@StudentID", studentClass.ID);
+                        command.Parameters.AddWithValue("@ClassID", studentClass.StudentID);
 
                         return await command.ExecuteNonQueryAsync() > 0;
                     }
@@ -192,7 +192,7 @@ namespace SchoolAPiDataAccessLayer
                 using (var connection = new SqlConnection(DataGlobal._connectionString))
                 {
 
-                    using (var command = new SqlCommand("sp_studentClasses_Exists", connection))
+                    using (var command = new SqlCommand("sp_studentClasses_Exist", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
