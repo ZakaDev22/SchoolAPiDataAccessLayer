@@ -4,8 +4,8 @@ using System.Data;
 
 namespace SchoolAPiDataAccessLayer
 {
-    public record UserDTO(int UserID, int PersonID, string UserName, int Permissions, int? AddedByUserID);
-    public record FullUserDTO(int UserID, int PersonID, string UserName, string Password, int Permissions, int? AddedByUserID);
+    public record UserDTO(int ID, int PersonID, string UserName, int Permissions, int? AddedByUserID);
+    public record FullUserDTO(int ID, int PersonID, string UserName, string Password, int Permissions, int? AddedByUserID);
 
     public class clsUsersData
     {
@@ -26,7 +26,7 @@ namespace SchoolAPiDataAccessLayer
                             while (await reader.ReadAsync())
                             {
                                 users.Add(new UserDTO(
-                                    reader.GetInt32(reader.GetOrdinal("UserID")),
+                                    reader.GetInt32(reader.GetOrdinal("ID")),
                                     reader.GetInt32(reader.GetOrdinal("PersonID")),
                                     reader.GetString(reader.GetOrdinal("UserName")),
                                      reader.GetInt32(reader.GetOrdinal("Permissions")),
@@ -61,14 +61,14 @@ namespace SchoolAPiDataAccessLayer
                     using (var command = new SqlCommand("sp_users_GetByID", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@UserID", userId);
+                        command.Parameters.AddWithValue("@ID", userId);
 
                         using (var reader = await command.ExecuteReaderAsync())
                         {
                             if (await reader.ReadAsync())
                             {
                                 user = new FullUserDTO(
-                                    reader.GetInt32(reader.GetOrdinal("UserID")),
+                                    reader.GetInt32(reader.GetOrdinal("ID")),
                                     reader.GetInt32(reader.GetOrdinal("PersonID")),
                                     reader.GetString(reader.GetOrdinal("UserName")),
                                      reader.GetString(reader.GetOrdinal("PasswordHash")),
@@ -144,7 +144,7 @@ namespace SchoolAPiDataAccessLayer
                         command.CommandType = CommandType.StoredProcedure;
 
                         command.Parameters.AddWithValue("@PersonID", user.PersonID);
-                        command.Parameters.AddWithValue("@UserID", user.UserID);
+                        command.Parameters.AddWithValue("@ID", user.ID);
                         command.Parameters.AddWithValue("@UserName", user.UserName);
                         command.Parameters.AddWithValue("@PasswordHash", user.Password);
                         command.Parameters.AddWithValue("@Permissions", user.Permissions);
@@ -173,7 +173,7 @@ namespace SchoolAPiDataAccessLayer
                     using (var command = new SqlCommand("sp_users_Delete", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@UserID", userId);
+                        command.Parameters.AddWithValue("@ID", userId);
 
                         return await command.ExecuteNonQueryAsync() > 0;
                     }
@@ -199,7 +199,7 @@ namespace SchoolAPiDataAccessLayer
                     using (var command = new SqlCommand("sp_users_ExistsByID", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@UserID", userId);
+                        command.Parameters.AddWithValue("@ID", userId);
 
                         return await command.ExecuteNonQueryAsync() > 0;
                     }
@@ -234,7 +234,7 @@ namespace SchoolAPiDataAccessLayer
                             if (await reader.ReadAsync())
                             {
                                 fullUserDTO = new FullUserDTO(
-                                    reader.GetInt32(reader.GetOrdinal("UserID")),
+                                    reader.GetInt32(reader.GetOrdinal("ID")),
                                     reader.GetInt32(reader.GetOrdinal("PersonID")),
                                     reader.GetString(reader.GetOrdinal("UserName")),
                                      reader.GetString(reader.GetOrdinal("PasswordHash")),

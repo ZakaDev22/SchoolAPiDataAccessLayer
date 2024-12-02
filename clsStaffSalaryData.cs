@@ -3,7 +3,7 @@ using System.Data;
 
 namespace SchoolAPiDataAccessLayer
 {
-    public record staffSalaryDTO(int StaffSalaryID, int StaffID, decimal Salary, DateTime EffectiveDate, decimal Bonus, decimal Deductions);
+    public record staffSalaryDTO(int ID, int StaffID, decimal Salary, DateTime EffectiveDate, decimal Bonus, decimal Deductions);
 
     public class clsStaffSalaryData
     {
@@ -25,7 +25,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 Staffs.Add(new staffSalaryDTO
                                     (
-                                        reader.GetInt32(reader.GetOrdinal("StaffSalaryID")),
+                                        reader.GetInt32(reader.GetOrdinal("ID")),
                                         reader.GetInt32(reader.GetOrdinal("StaffID")),
                                         reader.GetDecimal(reader.GetOrdinal("Salary")),
                                         reader.GetDateTime(reader.GetOrdinal("EffectiveDate")),
@@ -61,7 +61,7 @@ namespace SchoolAPiDataAccessLayer
                     using (var command = new SqlCommand("sp_staffSalary_FindByID", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@StaffSalaryID", ID);
+                        command.Parameters.AddWithValue("@ID", ID);
 
                         using (var reader = await command.ExecuteReaderAsync())
                         {
@@ -69,7 +69,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 staff = new staffSalaryDTO
                                              (
-                                                   reader.GetInt32(reader.GetOrdinal("StaffSalaryID")),
+                                                   reader.GetInt32(reader.GetOrdinal("ID")),
                                         reader.GetInt32(reader.GetOrdinal("StaffID")),
                                         reader.GetDecimal(reader.GetOrdinal("Salary")),
                                         reader.GetDateTime(reader.GetOrdinal("EffectiveDate")),
@@ -145,7 +145,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@StaffSalaryID", staff.StaffSalaryID);
+                        command.Parameters.AddWithValue("@ID", staff.ID);
                         command.Parameters.AddWithValue("@Salary", staff.Salary);
                         command.Parameters.AddWithValue("@Bonus", staff.Bonus);
                         command.Parameters.AddWithValue("@Deductions", staff.Deductions);
@@ -174,7 +174,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@StaffSalaryID", staffSalaryID);
+                        command.Parameters.AddWithValue("@ID", staffSalaryID);
 
                         await connection.OpenAsync();
                         return await command.ExecuteNonQueryAsync() > 0;
@@ -202,7 +202,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@StaffSalaryID", StaffSalaryID);
+                        command.Parameters.AddWithValue("@ID", StaffSalaryID);
 
                         await connection.OpenAsync();
                         var result = await command.ExecuteScalarAsync();

@@ -5,7 +5,7 @@ using System.Data;
 namespace SchoolAPiDataAccessLayer
 {
     // record Fpr Person DTO To Send And Retrive His Informations Instead Of Full Object
-    public record PersonDTO(int PersonID, string FirstName, string LastName, DateTime DateOfBirth, bool Gender, int SchoolID, int AddressID);
+    public record PersonDTO(int ID, string FirstName, string LastName, DateTime DateOfBirth, bool Gender, int SchoolID, int AddressID);
 
 
     public class clsPeopleData
@@ -30,7 +30,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 persons.Add(new PersonDTO
                                     (
-                                        reader.GetInt32(reader.GetOrdinal("PersonID")),
+                                        reader.GetInt32(reader.GetOrdinal("ID")),
                                         reader.GetString(reader.GetOrdinal("FirstName")),
                                         reader.GetString(reader.GetOrdinal("LastName")),
                                         reader.GetDateTime(reader.GetOrdinal("DateOfBirth")),
@@ -67,7 +67,7 @@ namespace SchoolAPiDataAccessLayer
                     using (var command = new SqlCommand("sp_people_FindByID", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@PersonID", personId);
+                        command.Parameters.AddWithValue("@ID", personId);
 
                         using (var reader = await command.ExecuteReaderAsync())
                         {
@@ -75,7 +75,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 person = new PersonDTO
                                              (
-                                                 reader.GetInt32(reader.GetOrdinal("PersonID")),
+                                                 reader.GetInt32(reader.GetOrdinal("ID")),
                                                  reader.GetString(reader.GetOrdinal("FirstName")),
                                                  reader.GetString(reader.GetOrdinal("LastName")),
                                                  reader.GetDateTime(reader.GetOrdinal("DateOfBirth")),
@@ -123,7 +123,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 person = new PersonDTO
                                              (
-                                                 reader.GetInt32(reader.GetOrdinal("PersonID")),
+                                                 reader.GetInt32(reader.GetOrdinal("ID")),
                                                  reader.GetString(reader.GetOrdinal("FirstName")),
                                                  reader.GetString(reader.GetOrdinal("LastName")),
                                                  reader.GetDateTime(reader.GetOrdinal("DateOfBirth")),
@@ -202,7 +202,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@PersonID", person.PersonID);
+                        command.Parameters.AddWithValue("@ID", person.ID);
                         command.Parameters.AddWithValue("@FirstName", person.FirstName);
                         command.Parameters.AddWithValue("@LastName", person.LastName);
                         command.Parameters.AddWithValue("@DateOfBirth", person.DateOfBirth);
@@ -235,7 +235,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@PersonID", personId);
+                        command.Parameters.AddWithValue("@ID", personId);
 
                         return await command.ExecuteNonQueryAsync() > 0;
                     }
@@ -263,7 +263,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@PersonID", PersonID);
+                        command.Parameters.AddWithValue("@ID", PersonID);
 
                         await connection.OpenAsync();
                         var result = await command.ExecuteScalarAsync();

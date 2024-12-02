@@ -4,7 +4,7 @@ using System.Data;
 
 namespace SchoolAPiDataAccessLayer
 {
-    public record subjectDTO(int SubjectID, string SubjectName, string SubjectCode, int SchoolID);
+    public record subjectDTO(int ID, string Name, string Code, int SchoolID);
 
     public class clsSubjectsData
     {
@@ -27,9 +27,9 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 subjects.Add(new subjectDTO
                                     (
-                                        reader.GetInt32(reader.GetOrdinal("SubjectID")),
-                                        reader.GetString(reader.GetOrdinal("SubjectName")),
-                                        reader.GetString(reader.GetOrdinal("SubjectCode")),
+                                        reader.GetInt32(reader.GetOrdinal("ID")),
+                                        reader.GetString(reader.GetOrdinal("Name")),
+                                        reader.GetString(reader.GetOrdinal("Code")),
                                         reader.GetInt32(reader.GetOrdinal("SchoolID"))
 
                                     ));
@@ -62,7 +62,7 @@ namespace SchoolAPiDataAccessLayer
                     using (var command = new SqlCommand("sp_subjects_FindByID", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@SubjectID", subjectID);
+                        command.Parameters.AddWithValue("@ID", subjectID);
 
                         using (var reader = await command.ExecuteReaderAsync())
                         {
@@ -70,9 +70,9 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 subject = new subjectDTO
                                              (
-                                                  reader.GetInt32(reader.GetOrdinal("SubjectID")),
-                                        reader.GetString(reader.GetOrdinal("SubjectName")),
-                                        reader.GetString(reader.GetOrdinal("SubjectCode")),
+                                                  reader.GetInt32(reader.GetOrdinal("ID")),
+                                        reader.GetString(reader.GetOrdinal("Name")),
+                                        reader.GetString(reader.GetOrdinal("Code")),
                                         reader.GetInt32(reader.GetOrdinal("SchoolID"))
 
                                               );
@@ -106,16 +106,16 @@ namespace SchoolAPiDataAccessLayer
                     using (var command = new SqlCommand("sp_subjects_FindBySubjectCode", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@SubjectCode", subjectCode);
+                        command.Parameters.AddWithValue("@Code", subjectCode);
 
                         using (var reader = await command.ExecuteReaderAsync())
                         {
                             if (await reader.ReadAsync())
                             {
                                 subject = new subjectDTO
-                                       (reader.GetInt32(reader.GetOrdinal("SubjectID")),
-                                           reader.GetString(reader.GetOrdinal("SubjectName")),
-                                           reader.GetString(reader.GetOrdinal("SubjectCode")),
+                                       (reader.GetInt32(reader.GetOrdinal("ID")),
+                                           reader.GetString(reader.GetOrdinal("Name")),
+                                           reader.GetString(reader.GetOrdinal("Code")),
                                            reader.GetInt32(reader.GetOrdinal("SchoolID"))
 
                                               );
@@ -146,8 +146,8 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@SubjectName", subject.SubjectName);
-                        command.Parameters.AddWithValue("@SubjectCode", subject.SubjectCode);
+                        command.Parameters.AddWithValue("@Name", subject.Name);
+                        command.Parameters.AddWithValue("@Code", subject.Code);
                         command.Parameters.AddWithValue("@SchoolID", subject.SchoolID);
 
 
@@ -186,9 +186,9 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@SubjectID", subject.SubjectID);
-                        command.Parameters.AddWithValue("@SubjectName", subject.SubjectName);
-                        command.Parameters.AddWithValue("@SubjectCode", subject.SubjectCode);
+                        command.Parameters.AddWithValue("@ID", subject.ID);
+                        command.Parameters.AddWithValue("@Name", subject.Name);
+                        command.Parameters.AddWithValue("@Code", subject.Code);
                         command.Parameters.AddWithValue("@SchoolID", subject.SchoolID);
 
                         return await command.ExecuteNonQueryAsync() > 0;
@@ -215,7 +215,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@SubjectID", subjectID);
+                        command.Parameters.AddWithValue("@ID", subjectID);
 
                         await connection.OpenAsync();
                         return await command.ExecuteNonQueryAsync() > 0;
