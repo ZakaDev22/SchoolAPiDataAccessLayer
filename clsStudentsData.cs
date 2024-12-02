@@ -3,7 +3,7 @@ using System.Data;
 
 namespace SchoolAPiDataAccessLayer
 {
-    public record studentDTO(int StudentID, int PersonID, int StudentGradeID, int SchoolID, DateTime EnrollmentDate, bool IsActive);
+    public record studentDTO(int ID, int PersonID, int StudentGradeID, int SchoolID, DateTime EnrollmentDate, bool IsActive);
 
     public class clsStudentsData
     {
@@ -26,7 +26,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 Students.Add(new studentDTO
                                     (
-                                        reader.GetInt32(reader.GetOrdinal("StudentID")),
+                                        reader.GetInt32(reader.GetOrdinal("ID")),
                                         reader.GetInt32(reader.GetOrdinal("PersonID")),
                                         reader.GetInt32(reader.GetOrdinal("StudentGradeID")),
                                         reader.GetInt32(reader.GetOrdinal("SchoolID")),
@@ -62,7 +62,7 @@ namespace SchoolAPiDataAccessLayer
                     using (var command = new SqlCommand("sp_students_FindByID", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@StudentID", StudentID);
+                        command.Parameters.AddWithValue("@ID", StudentID);
 
                         using (var reader = await command.ExecuteReaderAsync())
                         {
@@ -70,7 +70,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 student = new studentDTO
                                              (
-                                                 reader.GetInt32(reader.GetOrdinal("StudentID")),
+                                                 reader.GetInt32(reader.GetOrdinal("ID")),
                                                  reader.GetInt32(reader.GetOrdinal("PersonID")),
                                                  reader.GetInt32(reader.GetOrdinal("StudentGradeID")),
                                                  reader.GetInt32(reader.GetOrdinal("SchoolID")),
@@ -115,7 +115,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 student = new studentDTO
                                              (
-                                                 reader.GetInt32(reader.GetOrdinal("StudentID")),
+                                                 reader.GetInt32(reader.GetOrdinal("ID")),
                                                  reader.GetInt32(reader.GetOrdinal("PersonID")),
                                                  reader.GetInt32(reader.GetOrdinal("StudentGradeID")),
                                                  reader.GetInt32(reader.GetOrdinal("SchoolID")),
@@ -191,7 +191,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@StudentID", student.StudentID);
+                        command.Parameters.AddWithValue("@ID", student.ID);
                         //command.Parameters.AddWithValue("@PersonID", student.PersonID);
                         command.Parameters.AddWithValue("@StudentGradeID", student.StudentGradeID);
                         command.Parameters.AddWithValue("@SchoolID", student.SchoolID);
@@ -221,7 +221,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@StudentID", studentID);
+                        command.Parameters.AddWithValue("@ID", studentID);
 
                         await connection.OpenAsync();
                         return await command.ExecuteNonQueryAsync() > 0;
@@ -249,7 +249,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@StudentID", studentID);
+                        command.Parameters.AddWithValue("@ID", studentID);
 
                         await connection.OpenAsync();
                         var result = await command.ExecuteScalarAsync();

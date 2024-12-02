@@ -4,7 +4,7 @@ using System.Data;
 
 namespace SchoolAPiDataAccessLayer
 {
-    public record staffDTO(int StaffID, int PersonID, int JobTitleID, int DepartmentID, int SchoolID, int StaffSalaryID);
+    public record staffDTO(int ID, int PersonID, int JobTitleID, int DepartmentID, int SchoolID, int StaffSalaryID);
 
     public class clsStaffData
     {
@@ -26,7 +26,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 Staffs.Add(new staffDTO
                                     (
-                                        reader.GetInt32(reader.GetOrdinal("StaffID")),
+                                        reader.GetInt32(reader.GetOrdinal("ID")),
                                         reader.GetInt32(reader.GetOrdinal("PersonID")),
                                         reader.GetInt32(reader.GetOrdinal("JobTitleID")),
                                         reader.GetInt32(reader.GetOrdinal("DepartmentID")),
@@ -70,7 +70,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 staff = new staffDTO
                                              (
-                                                  reader.GetInt32(reader.GetOrdinal("StaffID")),
+                                                  reader.GetInt32(reader.GetOrdinal("ID")),
                                                   reader.GetInt32(reader.GetOrdinal("PersonID")),
                                                   reader.GetInt32(reader.GetOrdinal("JobTitleID")),
                                                   reader.GetInt32(reader.GetOrdinal("DepartmentID")),
@@ -147,7 +147,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@ID", staff.StaffID);
+                        command.Parameters.AddWithValue("@ID", staff.ID);
                         command.Parameters.AddWithValue("@PersonID", staff.PersonID);
                         command.Parameters.AddWithValue("@JobTitleID", staff.JobTitleID);
                         command.Parameters.AddWithValue("@DepartmentID", staff.DepartmentID);

@@ -3,7 +3,7 @@ using System.Data;
 
 namespace SchoolAPiDataAccessLayer
 {
-    public record parentDTO(int ParentID, int PersonID, int RelationshipTypeID, int StudentID);
+    public record parentDTO(int ID, int PersonID, int RelationshipTypeID, int StudentID);
 
     public class clsParentsData
     {
@@ -25,7 +25,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 parents.Add(new parentDTO
                                     (
-                                        reader.GetInt32(reader.GetOrdinal("ParentID")),
+                                        reader.GetInt32(reader.GetOrdinal("ID")),
                                         reader.GetInt32(reader.GetOrdinal("PersonID")),
                                         reader.GetInt32(reader.GetOrdinal("RelationshipTypeID")),
                                         reader.GetInt32(reader.GetOrdinal("StudentID"))
@@ -59,7 +59,7 @@ namespace SchoolAPiDataAccessLayer
                     using (var command = new SqlCommand("sp_parents_FindByID", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@ParentID", parentID);
+                        command.Parameters.AddWithValue("@ID", parentID);
 
                         using (var reader = await command.ExecuteReaderAsync())
                         {
@@ -67,7 +67,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 parent = new parentDTO
                                              (
-                                                 reader.GetInt32(reader.GetOrdinal("ParentID")),
+                                                 reader.GetInt32(reader.GetOrdinal("ID")),
                                         reader.GetInt32(reader.GetOrdinal("PersonID")),
                                         reader.GetInt32(reader.GetOrdinal("RelationshipTypeID")),
                                         reader.GetInt32(reader.GetOrdinal("StudentID"))
@@ -140,7 +140,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@ParentID", parent.ParentID);
+                        command.Parameters.AddWithValue("@ID", parent.ID);
                         command.Parameters.AddWithValue("@PersonID", parent.PersonID);
                         command.Parameters.AddWithValue("@RelationshipID", parent.RelationshipTypeID);
                         command.Parameters.AddWithValue("@StudentID", parent.StudentID);
@@ -169,7 +169,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@ParentID", parentID);
+                        command.Parameters.AddWithValue("@ID", parentID);
 
                         await connection.OpenAsync();
                         return await command.ExecuteNonQueryAsync() > 0;
@@ -197,7 +197,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@ParentID", parentID);
+                        command.Parameters.AddWithValue("@ID", parentID);
 
                         await connection.OpenAsync();
                         var result = await command.ExecuteScalarAsync();

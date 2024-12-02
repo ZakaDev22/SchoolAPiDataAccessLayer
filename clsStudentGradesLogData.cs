@@ -3,7 +3,7 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 namespace SchoolAPiDataAccessLayer
 {
-    public record sgLogDTO(int LogID, int StudentID, int SubjectID, decimal Grade, DateTime LogDate, string Comments);
+    public record sgLogDTO(int ID, int StudentID, int SubjectID, decimal Grade, DateTime LogDate, string Comments);
 
     public class clsStudentGradesLogData
     {
@@ -25,7 +25,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 sgLogs.Add(new sgLogDTO
                                     (
-                                        reader.GetInt32(reader.GetOrdinal("LogID")),
+                                        reader.GetInt32(reader.GetOrdinal("ID")),
                                         reader.GetInt32(reader.GetOrdinal("StudentID")),
                                         reader.GetInt32(reader.GetOrdinal("SubjectID")),
                                         reader.GetDecimal(reader.GetOrdinal("Grade")),
@@ -62,7 +62,7 @@ namespace SchoolAPiDataAccessLayer
                     using (var command = new SqlCommand("sp_studentsGradesLog_Find", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@LogID", ID);
+                        command.Parameters.AddWithValue("@ID", ID);
 
                         using (var reader = await command.ExecuteReaderAsync())
                         {
@@ -70,7 +70,7 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 sglog = new sgLogDTO
                                              (
-                                                reader.GetInt32(reader.GetOrdinal("LogID")),
+                                                reader.GetInt32(reader.GetOrdinal("ID")),
                                         reader.GetInt32(reader.GetOrdinal("StudentID")),
                                         reader.GetInt32(reader.GetOrdinal("SubjectID")),
                                         reader.GetDecimal(reader.GetOrdinal("Grade")),
@@ -148,7 +148,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@LogID", sglog.LogID);
+                        command.Parameters.AddWithValue("@ID", sglog.ID);
                         command.Parameters.AddWithValue("@StudentID", sglog.StudentID);
                         command.Parameters.AddWithValue("@SubjectID", sglog.SubjectID);
                         command.Parameters.AddWithValue("@Grade", sglog.Grade);
@@ -178,7 +178,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@LogID", ID);
+                        command.Parameters.AddWithValue("@ID", ID);
 
                         await connection.OpenAsync();
                         return await command.ExecuteNonQueryAsync() > 0;
@@ -206,7 +206,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@LogID", ID);
+                        command.Parameters.AddWithValue("@ID", ID);
 
                         await connection.OpenAsync();
                         var result = await command.ExecuteScalarAsync();

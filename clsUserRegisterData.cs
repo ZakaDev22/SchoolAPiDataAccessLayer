@@ -4,7 +4,7 @@ using System.Data;
 
 namespace SchoolAPiDataAccessLayer
 {
-    public record userRegisterDTO(int RegisterID, int UserID, DateTime LoginTime, DateTime? LogoutTime, string IPAddress, int? SessionDuration);
+    public record userRegisterDTO(int ID, int UserID, DateTime LoginTime, DateTime? LogoutTime, string IPAddress, int? SessionDuration);
     public class clsUserRegisterData
     {
         public static async Task<IEnumerable<userRegisterDTO>> GetAllAsync()
@@ -61,7 +61,7 @@ namespace SchoolAPiDataAccessLayer
                     using (var command = new SqlCommand("sp_usersRegister_FindByID", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@RegisterID", ID);
+                        command.Parameters.AddWithValue("@ID", ID);
 
                         using (var reader = await command.ExecuteReaderAsync())
                         {
@@ -149,7 +149,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@RegisterID", registerID);
+                        command.Parameters.AddWithValue("@ID", registerID);
 
                         return await command.ExecuteNonQueryAsync() > 0;
                     }
@@ -175,7 +175,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@RegisterID", ID);
+                        command.Parameters.AddWithValue("@ID", ID);
 
                         await connection.OpenAsync();
                         return await command.ExecuteNonQueryAsync() > 0;
