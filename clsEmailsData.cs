@@ -91,6 +91,62 @@ namespace SchoolAPiDataAccessLayer
             return email;
         }
 
+        public static async Task<bool> DeleteAsync(int ID)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(DataGlobal._connectionString))
+                {
+                    using (var command = new SqlCommand("sp_emails_Delete", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@EmailID", ID);
+
+                        await connection.OpenAsync();
+                        return await command.ExecuteNonQueryAsync() > 0;
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<bool> IsExistsAsync(int ID)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(DataGlobal._connectionString))
+                {
+
+                    using (var command = new SqlCommand("sp_emails_Exist", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@EmailID", ID);
+
+                        await connection.OpenAsync();
+                        var result = await command.ExecuteScalarAsync();
+                        return Convert.ToBoolean(result);
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
 
     }
 }
