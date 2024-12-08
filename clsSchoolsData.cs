@@ -25,8 +25,8 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 schools.Add(new schoolDTO
                                     (
-                                        reader.GetInt32(reader.GetOrdinal("ID")),
-                                        reader.GetString(reader.GetOrdinal("Name")),
+                                        reader.GetInt32(reader.GetOrdinal("SchoolID")),
+                                        reader.GetString(reader.GetOrdinal("SchoolName")),
                                         reader.GetInt32(reader.GetOrdinal("AddressID"))
                                     ));
                             }
@@ -58,7 +58,7 @@ namespace SchoolAPiDataAccessLayer
                     using (var command = new SqlCommand("sp_schools_FindByID", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@ID", schoolID);
+                        command.Parameters.AddWithValue("@SchoolID", schoolID);
 
                         using (var reader = await command.ExecuteReaderAsync())
                         {
@@ -66,8 +66,8 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 school = new schoolDTO
                                              (
-                                                  reader.GetInt32(reader.GetOrdinal("ID")),
-                                        reader.GetString(reader.GetOrdinal("Name")),
+                                                  reader.GetInt32(reader.GetOrdinal("SchoolID")),
+                                        reader.GetString(reader.GetOrdinal("SchoolName")),
                                         reader.GetInt32(reader.GetOrdinal("AddressID"))
                                               );
                             };
@@ -100,7 +100,7 @@ namespace SchoolAPiDataAccessLayer
                     using (var command = new SqlCommand("sp_schools_FindByName", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@Name", SchoolName);
+                        command.Parameters.AddWithValue("@SchoolName", SchoolName);
 
                         using (var reader = await command.ExecuteReaderAsync())
                         {
@@ -108,8 +108,8 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 school = new schoolDTO
                                              (
-                                                  reader.GetInt32(reader.GetOrdinal("ID")),
-                                        reader.GetString(reader.GetOrdinal("Name")),
+                                                 reader.GetInt32(reader.GetOrdinal("SchoolID")),
+                                        reader.GetString(reader.GetOrdinal("SchoolName")),
                                         reader.GetInt32(reader.GetOrdinal("AddressID"))
                                               );
                             };
@@ -139,7 +139,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@Name", school.Name);
+                        command.Parameters.AddWithValue("@SchoolName", school.Name);
                         command.Parameters.AddWithValue("@AddressID", school.AddressID);
 
 
@@ -178,8 +178,8 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@ID", school.ID);
-                        command.Parameters.AddWithValue("@Name", school.Name);
+                        command.Parameters.AddWithValue("@SchoolID", school.ID);
+                        command.Parameters.AddWithValue("@SchoolName", school.Name);
                         command.Parameters.AddWithValue("@AddressID", school.AddressID);
 
                         return await command.ExecuteNonQueryAsync() > 0;
@@ -206,7 +206,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@ID", schoolID);
+                        command.Parameters.AddWithValue("@SchoolID", schoolID);
 
                         await connection.OpenAsync();
                         return await command.ExecuteNonQueryAsync() > 0;
