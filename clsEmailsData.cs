@@ -91,6 +91,77 @@ namespace SchoolAPiDataAccessLayer
             return email;
         }
 
+        public static async Task<int> AddAsync(EmailDTO email)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(DataGlobal._connectionString))
+                {
+                    using (var command = new SqlCommand("sp_emails_Insert", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@EmailAddress", email.Address);
+                        command.Parameters.AddWithValue("@PersonID", email.PersonID);
+                        command.Parameters.AddWithValue("@EmailTypeID", email.EmailTypeID);
+                        command.Parameters.AddWithValue("@IsPrimary", email.IsPrimary);
+
+                        var outputIdParam = new SqlParameter("@NewID", SqlDbType.Int)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+
+                        command.Parameters.Add(outputIdParam);
+
+                        await connection.OpenAsync();
+                        await command.ExecuteNonQueryAsync();
+
+                        return (int)outputIdParam.Value;
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<bool> UpdateAsync(EmailDTO email)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(DataGlobal._connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (var command = new SqlCommand("sp_emails_Update", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@EmailID", email.ID);
+                        command.Parameters.AddWithValue("@EmailAddress", email.Address);
+                        command.Parameters.AddWithValue("@PersonID", email.PersonID);
+                        command.Parameters.AddWithValue("@EmailTypeID", email.EmailTypeID);
+                        command.Parameters.AddWithValue("@IsPrimary", email.IsPrimary);
+
+
+                        return await command.ExecuteNonQueryAsync() > 0;
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public static async Task<bool> DeleteAsync(int ID)
         {
             try
