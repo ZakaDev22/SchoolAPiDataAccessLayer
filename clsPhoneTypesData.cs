@@ -1,12 +1,88 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace SchoolAPiDataAccessLayer
 {
-    internal class clsPhoneTypesData
+    public record phoneTypesDTO(int ID, string Name);
+    public class clsPhoneTypesData
     {
+        public static async Task<IEnumerable<phoneTypesDTO>> GetAllAsync()
+        {
+            var phoneTypes = new List<phoneTypesDTO>();
+
+            try
+            {
+                using (var connection = new SqlConnection(DataGlobal._connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (var command = new SqlCommand("sp_phonetypes_GetAll", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        using (var reader = await command.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                phoneTypes.Add(new phoneTypesDTO
+                                    (
+                                        reader.GetInt32(reader.GetOrdinal("PhoneTypeID")),
+                                        reader.GetString(reader.GetOrdinal("PhoneTypeName"))
+                                    ));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return phoneTypes;
+        }
+
+        public static async Task<phoneTypesDTO> GetByIdAsync(int PhoneTypeID)
+        {
+            phoneTypesDTO phoneType = null;
+
+            try
+            {
+                using (var connection = new SqlConnection(DataGlobal._connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (var command = new SqlCommand("sp_phonetypes_FindByID", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@PhoneTypeID", PhoneTypeID);
+
+                        using (var reader = await command.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                phoneType = new phoneTypesDTO
+                                             (
+                                                reader.GetInt32(reader.GetOrdinal("PhoneTypeID")),
+                                        reader.GetString(reader.GetOrdinal("PhoneTypeName"))
+                                              );
+                            };
+
+                        }
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return phoneType;
+        }
     }
 }
