@@ -18,7 +18,7 @@ namespace SchoolAPiDataAccessLayer
                 using (var connection = new SqlConnection(DataGlobal._connectionString))
                 {
                     await connection.OpenAsync();
-                    using (var command = new SqlCommand("sp_emailtypes_FindAll", connection))
+                    using (var command = new SqlCommand("sp_emailtypes_GetAll", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         using (var reader = await command.ExecuteReaderAsync())
