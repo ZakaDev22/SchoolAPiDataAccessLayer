@@ -84,5 +84,32 @@ namespace SchoolAPiDataAccessLayer
 
             return phoneType;
         }
+
+        public static async Task<bool> DeleteAsync(int ID)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(DataGlobal._connectionString))
+                {
+                    using (var command = new SqlCommand("sp_phonetypes_Delete", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@PhoneTypeID", ID);
+
+                        await connection.OpenAsync();
+                        return await command.ExecuteNonQueryAsync() > 0;
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
