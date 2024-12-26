@@ -145,5 +145,73 @@ namespace SchoolAPiDataAccessLayer
                 throw;
             }
         }
+
+        public static async Task<int> AddAsync(sGradeDTO sGrade)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(DataGlobal._connectionString))
+                {
+                    using (var command = new SqlCommand("sp_studentgrades_Insert", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+
+                        command.Parameters.AddWithValue("@GradeName", sGrade.Name);
+                        command.Parameters.AddWithValue("@SchoolID", sGrade.SchoolID);
+
+
+                        var outputIdParam = new SqlParameter("@NewID", SqlDbType.Int)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+
+                        command.Parameters.Add(outputIdParam);
+
+                        await connection.OpenAsync();
+                        await command.ExecuteNonQueryAsync();
+
+                        return (int)outputIdParam.Value;
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<bool> UpdateAsync(sGradeDTO sGrade)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(DataGlobal._connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (var command = new SqlCommand("sp_studentgrades_Update", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@GradeID", sGrade.ID);
+                        command.Parameters.AddWithValue("@GradeName", sGrade.Name);
+                        command.Parameters.AddWithValue("@SchoolID", sGrade.SchoolID);
+
+                        return await command.ExecuteNonQueryAsync() > 0;
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
