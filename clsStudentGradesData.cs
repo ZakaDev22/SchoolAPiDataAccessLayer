@@ -89,5 +89,61 @@ namespace SchoolAPiDataAccessLayer
 
             return sGrade;
         }
+
+        public static async Task<bool> DeleteAsync(int ID)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(DataGlobal._connectionString))
+                {
+                    using (var command = new SqlCommand("sp_studentgrades_Delete", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@GradeID", ID);
+
+                        await connection.OpenAsync();
+                        return await command.ExecuteNonQueryAsync() > 0;
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<bool> IsExistsAsync(int ID)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(DataGlobal._connectionString))
+                {
+
+                    using (var command = new SqlCommand("sp_studentgrades_Exist", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@GradeID", ID);
+
+                        await connection.OpenAsync();
+                        var result = await command.ExecuteScalarAsync();
+                        return Convert.ToBoolean(result);
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
