@@ -45,8 +45,6 @@ namespace SchoolAPiDataAccessLayer
             return relationshipType;
         }
 
-
-
         public static async Task<RelationshipTypeDTO> GetByIdAsync(int ID)
         {
             RelationshipTypeDTO relationshipType = null;
