@@ -163,5 +163,76 @@ namespace SchoolAPiDataAccessLayer
                 throw;
             }
         }
+
+        public static async Task<int> AddAsync(addressDTO address)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(DataGlobal._connectionString))
+                {
+                    using (var command = new SqlCommand("sp_addresses_Insert", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@Street", address.Street);
+                        command.Parameters.AddWithValue("@City", address.City);
+                        command.Parameters.AddWithValue("@StateID", address.StateID);
+                        command.Parameters.AddWithValue("@CountryID", address.CountryID);
+
+
+                        var outputIdParam = new SqlParameter("@NewID", SqlDbType.Int)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+
+                        command.Parameters.Add(outputIdParam);
+
+                        await connection.OpenAsync();
+                        await command.ExecuteNonQueryAsync();
+
+                        return (int)outputIdParam.Value;
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<bool> UpdateAsync(addressDTO address)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(DataGlobal._connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (var command = new SqlCommand("sp_addresses_Update", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@AddressID", address.ID);
+                        command.Parameters.AddWithValue("@Street", address.Street);
+                        command.Parameters.AddWithValue("@City", address.City);
+                        command.Parameters.AddWithValue("@StateID", address.StateID);
+                        command.Parameters.AddWithValue("@CountryID", address.CountryID);
+
+                        return await command.ExecuteNonQueryAsync() > 0;
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
