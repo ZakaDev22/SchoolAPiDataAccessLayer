@@ -25,10 +25,10 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 attendaces.Add(new attendanceDTO
                                     (
-                                        reader.GetInt32(reader.GetOrdinal("ID")),
+                                        reader.GetInt32(reader.GetOrdinal("AttendanceID")),
                                         reader.GetInt32(reader.GetOrdinal("StudentID")),
                                         reader.GetInt32(reader.GetOrdinal("ClassID")),
-                                        reader.GetDateTime(reader.GetOrdinal("Date")),
+                                        reader.GetDateTime(reader.GetOrdinal("AttendanceDate")),
                                         reader.GetBoolean(reader.GetOrdinal("Status"))
 
                                     ));
@@ -69,10 +69,10 @@ namespace SchoolAPiDataAccessLayer
                             {
                                 attendance = new attendanceDTO
                                                 (
-                                                    reader.GetInt32(reader.GetOrdinal("ID")),
+                                                    reader.GetInt32(reader.GetOrdinal("AttendanceID")),
                                                     reader.GetInt32(reader.GetOrdinal("StudentID")),
                                                     reader.GetInt32(reader.GetOrdinal("ClassID")),
-                                                    reader.GetDateTime(reader.GetOrdinal("Date")),
+                                                    reader.GetDateTime(reader.GetOrdinal("AttendanceDate")),
                                                     reader.GetBoolean(reader.GetOrdinal("Status"))
 
                                                 );
@@ -144,7 +144,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@ID", Attendance.ID);
+                        command.Parameters.AddWithValue("@AttendanceID", Attendance.ID);
                         command.Parameters.AddWithValue("@StudentID", Attendance.StudentID);
                         command.Parameters.AddWithValue("@ClassID", Attendance.ClassID);
                         command.Parameters.AddWithValue("@Status", Attendance.Status);
@@ -173,7 +173,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@ID", ID);
+                        command.Parameters.AddWithValue("@AttendanceID", ID);
 
                         await connection.OpenAsync();
                         return await command.ExecuteNonQueryAsync() > 0;
@@ -201,7 +201,7 @@ namespace SchoolAPiDataAccessLayer
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@ID", ID);
+                        command.Parameters.AddWithValue("@AttendanceID", ID);
 
                         await connection.OpenAsync();
                         var result = await command.ExecuteScalarAsync();
